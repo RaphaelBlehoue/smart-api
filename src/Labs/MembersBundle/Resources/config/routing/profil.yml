@@ -1,0 +1,3 @@
+labs_members_profile_overview:
+    path:    /profile
+    defaults: { _controller: LabsMembersBundle:Users:Overview }

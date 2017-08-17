@@ -1,0 +1,23 @@
+labs_members_client_view:
+    path:     /view
+    defaults: { _controller: LabsMembersBundle:Client:view }
+
+labs_members_client_add:
+    path:     /add
+    defaults: { _controller: LabsMembersBundle:Client:add }
+
+labs_members_client_edit:
+    path:     /edit/{slug}-{id}
+    defaults: { _controller: LabsMembersBundle:Client:edit }
+    requirements:
+        id : \d+
+
+labs_members_client_delete:
+    path:     /delete/{id}
+    defaults: { _controller: LabsMembersBundle:Client:delete }
+    requirements:
+        id : \d+
+
+labs_members_client_modal_add:
+    path:     /modal/create
+    defaults: { _controller: LabsMembersBundle:Client:addModal }

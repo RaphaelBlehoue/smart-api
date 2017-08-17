@@ -1,0 +1,100 @@
+{% extends 'LabsFacturationBundle::layout_system.html.twig' %}
+{% block Title %}  {{ 'Gestion de Proforma'|capitalize }} {% endblock %}
+{% block loyout_body %}
+    <!-- Individual column searching (text inputs) -->
+    <!-- START CONTAINER FLUID -->
+
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span class="text-semibold">{{ flashMessage|capitalize }}</span>
+        </div>
+    {% endfor %}
+
+
+    <!-- START PANEL -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Gestion des Proformas - Liste des proformas</h5>
+            <div class="heading-elements">
+                <div class="btn-group">
+                    <a href="{{ path('labs_facturation_proforma_get_create') }}" class="btn btn-success btn-labeled"> Créer une nouvelle proforma <b><i class="icon-plus3 position-right"></i></b></a>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="panel-body">
+            Tableau de La liste des Proformas
+        </div>
+
+        <table class="table datatable-column-search-inputs">
+            <thead>
+            <tr>
+                <th>Reference</th>
+                <th>Status</th>
+                <th>Date de creation</th>
+                <th>Créer par </th>
+                <th>Client </th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for proforma in list %}
+                {% if proforma|length > 0 %}
+                    <tr>
+                        <td><span class="label label-primary">N/Réf : {{ proforma.referenceView|upper }}</span></td>
+
+                        {% if proforma.status == -1 %}
+                            <td><span class="label label-flat border-danger text-danger-600">{{ 'Brouillon - En attente de validation'|upper  }}</span></td>
+                        {% elseif proforma.status == 0 %}
+                            <td><span class="label label-danger">{{ 'en attente de bon de livraison'|upper  }}</span></td>
+                        {% elseif proforma.status == 1 %}
+                            <td><span class="label bg-purple">{{ 'validé en BL - Livraison en cours'|upper  }}</span></td>
+                        {% elseif proforma.status == 3 %}
+                            <td><span class="label label-default">{{ 'Annuler'|upper  }}</span></td>
+                        {% else %}
+                            <td><span class="label label-success">{{ 'Livrée'|upper  }}</span></td>
+                        {% endif %}
+
+                        <td><a href="#">{{ proforma.created|date('d/m/Y', proforma.created.timezone) }}</a></td>
+                        <td><a href="#">{{ proforma.Users.firstname|upper }} &nbsp; {{ proforma.Users.lastname|upper }}</a></td>
+                        <td><a href="#">{{ proforma.Clients.name|upper }} | {{ proforma.Clients.representant|upper }}</a></td>
+                        <td class="text-center">
+                            <ul class="icons-list">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="icon-menu9"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        {% if proforma.status != -1 %}
+                                            <li><a href="{{ path('labs_facturation_proforma_view', { 'id' : proforma.id, 'reference': proforma.reference}) }}"><i class="icon-menu2"></i>{{ 'Afficher'|capitalize }}</a></li>
+                                        {% endif %}
+                                        {% if proforma.status != 1 and  proforma.status != 2  and proforma.status != 3 %}
+                                            <li><a href="{{ path('labs_facturation_proforma_add_product', { 'id' : proforma.id,'reference': proforma.reference }) }}"><i class="icon-pencil5"></i>{{ 'Modifier le contenu'|capitalize }}</a></li>
+                                            <li><a href="{{ path('labs_facturation_proforma_edit', { 'id' : proforma.id,'reference': proforma.reference }) }}"><i class="icon-pencil"></i>{{ 'Modifier la proforma'|capitalize }}</a></li>
+                                        {% endif %}
+                                            <li><a href="{{ path('labs_facturation_proforma_delete', { 'id' : proforma.id}) }}"><i class=" icon-trash"></i>{{ 'Supprimer'|capitalize }}</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <!-- /individual column searching (text inputs) -->
+
+
+{% endblock %}
+{% block themes %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/datatables_api.js') }}"></script>
+
+
+{% endblock %}

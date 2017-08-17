@@ -1,0 +1,198 @@
+{% extends 'LabsFacturationBundle::layout_system.html.twig' %}
+{% block Title %}  {{ 'Gestion de Proforma'|capitalize }} {% endblock %}
+{% block loyout_body %}
+    <!-- Individual column searching (text inputs) -->
+    <!-- START CONTAINER FLUID -->
+
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span class="text-semibold"> <strong>{{ flashMessage|upper }}</strong></span>
+        </div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashbag.get('warning') %}
+        <div class="alert alert-warning alert-styled-left alert-arrow-left alert-bordered">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span class="text-semibold">{{ flashMessage|upper }}</span>
+        </div>
+    {% endfor %}
+    <!-- Invoice template -->
+    {% for proforma in data %}
+        <div class="panel panel-white">
+            <div class="panel-heading">
+                <h5 class="panel-title"><strong>{{ 'facture pro-forma'|upper }} | {{ 'Crée par'|upper }} {{ proforma.Users.firstname|upper }}  {{ proforma.Users.lastname|upper }} </strong></h5>
+                <div class="heading-elements">
+                    {% if proforma.status != -1 %}
+                        <div class="btn-group groupaction">
+                            <button type="button" class="btn btn-primary btn-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="icon-menu7"></i> &nbsp;<span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                {% if proforma.status == 0 %}
+                                    <li><a href="{{ path('labs_facturation_commandes_create',{ 'proforma': proforma.id }) }}"><i class=" icon-certificate"></i> {{ 'Confirmer en commande'|capitalize }}</a></li>
+                                    <li class="divider"></li>
+                                {% endif %}
+                                <li><a href="{{ path('labs_facturation_proforma_view_pdf', { 'id': proforma.id , 'reference': proforma.reference }) }}" target="_blank"><i class="icon-printer2"></i> {{ 'imprimer'|capitalize }}</a></li>
+                                {% if proforma.status != 3 and proforma.status != 2 %}
+                                    <li><a href="{{ path('labs_facturation_proforma_cancel', { 'id': proforma.id }) }}"><i class="icon-cancel-square"></i> {{ 'Annuler'|capitalize }}</a></li>
+                                {% endif %}
+                                {% if proforma.status != 0 and  proforma.status != 3 %}
+                                    <li class="divider"></li>
+                                    <li><a href="{{ path('labs_facturation_commandes_view_bl',{ 'proforma_id': proforma.id ,'proforma_ref': proforma.reference }) }}"><i class=" icon-certificate"></i> {{ 'Affichez bon de livraison'|capitalize }}</a></li>
+                                {% endif %}
+
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="panel-body no-padding-bottom">
+                <div class="row">
+                    <div class="col-md-6 content-group">
+                        <img src="{{ proforma.compagny.AssertPath|imagine_filter('my_thumb_invoice') }}" class="content-group mt-10" alt="" style="width: 120px;">
+                        <ul class="list-condensed list-unstyled">
+                            <li><strong>{{ proforma.compagny.name|upper }}</strong></li>
+                            <li>{{ proforma.compagny.street|capitalize }}</li>
+                            <li>{{ proforma.compagny.phone }} - {{ proforma.compagny.phoneTwo }}</li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6 content-group">
+                        <div class="invoice-details">
+                            <h5 class="text-uppercase text-semibold"> N/Réf : {{ proforma.referenceView|upper }}</h5>
+                            <ul class="list-condensed list-unstyled">
+                                <li>Fait le : <span class="text-semibold">{{ proforma.created|date('d M, Y', proforma.created.timezone) }} </span></li>
+                                <!--<li>Due date: <span class="text-semibold">May 12, 2015</span></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-9 content-group">
+                        <span class="text-muted">Adresse à:</span>
+                        <ul class="list-condensed list-unstyled">
+                            <li><h5>{{ proforma.clients.representant|upper }}</h5></li>
+                            <li>De la sociéte : <span class="text-semibold">{{ proforma.clients.name|upper }}</span></li>
+                            <li>{{ proforma.clients.adresse }}</li>
+                            <!--<li>London E1 8BF</li>
+                            <li>United Kingdom</li>
+                            <li>888-555-2311</li>-->
+                            <li><a href="#">{{ proforma.clients.emailEntreprise  }}</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3 content-group">
+                        <span class="text-muted">Informations et Paiement:</span>
+                        <ul class="list-condensed list-unstyled invoice-payment-details">
+                            <li><h5>Total TTC: <span class="text-right text-primary text-semibold">{{ total.montTTC|number_format(0, ',', '.') }} FCFA</span></h5></li>
+                            <li>Banque : <span class="text-semibold">{{ proforma.compagny.bank|capitalize }}</span></li>
+                            <li>Pays: <span>{{ proforma.compagny.country|upper }}</span></li>
+                            <li>Ville: <span>{{ proforma.compagny.city|capitalize }}</span></li>
+                            <li>Address: <span>{{ proforma.compagny.adresse|capitalize }}</span></li>
+                            <li>Rue: <span class="text-semibold">{{ proforma.compagny.street|capitalize }}</span></li>
+                            <li>Régîme d'imposition : <span class="text-semibold">{{ proforma.compagny.regime|capitalize }}</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-lg">
+                    <thead>
+                    <tr>
+                        <th class="col-sm-1">Référence</th>
+                        <th>Designation</th>
+                        <th class="col-sm-1">Qté</th>
+                        {% if proforma.services.id == 2 %} <th class="col-sm-1"> Durée </th> {% endif %}
+                        <th class="col-sm-2">Px unit. HT</th>
+                        <th class="col-sm-1">Rémise</th>
+                        <th class="col-sm-2">Montant HT</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for prd in proforma.proformasproducts %}
+                        <tr>
+                            <td>{{ prd.products.reference }}</td>
+                            <td><h6 class="no-margin">{{ prd.products.name }}</h6></td>
+                            <td>{{ prd.qteCmd }}</td>
+                            {% if proforma.services.id == 2 %}
+                                <td>{{ prd.duration }}</td>
+                            {% endif %}
+                            <td>{{ prd.price|number_format(0, ',', '.') }}</td>
+                            <td><span class="label label-flat border-danger text-danger-600">{{ (prd.remise|length > 0 ) ? prd.remise : 0 }} % </span></td>
+                            <td><span class="text-semibold">{{ prd.montHt|number_format(0, ',', '.') }}</span></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="panel-body">
+                <div class="row invoice-payment">
+                    <div class="col-sm-7">
+                        <div class="content-group">
+                            <div class="form-group">
+                                <div class="col-lg-11">
+                                   Arrétez de la somme de : <strong>{{ proforma.arrete|upper }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-group">
+                            <div class="form-group">
+                                <div class="col-lg-11" style="padding-top: 30px">
+                                    {% if proforma.conditions|length > 0  %}
+                                        Conditions de réglements : <strong>{{ proforma.conditions.informations }}</strong>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5">
+                        <div class="content-group">
+                            <h6>Montant Total</h6>
+                            <div class="table-responsive no-border">
+                                <table class="table">
+                                    <tbody>
+                                    <tr>
+                                        <th>Total HT:</th>
+                                        <td class="text-right"><strong>{{ total.montHt|number_format(0, ',', '.') }} FCFA</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tva: <span class="text-regular">(18%)</span></th>
+                                        <td class="text-right"><strong>{{ total.montTva|number_format(0, ',', '.') }} FCFA</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total TTC:</th>
+                                        <td class="text-right text-primary"><h5 class="text-semibold">{{ total.montTTC|number_format(0, ',', '.') }} FCFA</h5></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="text-right">
+                                {% if proforma.status == -1 %}
+                                    <a href="{{ path('labs_facturation_proforma_validate_ending', {'id': proforma.id }) }}" class="btn btn-success btn-labeled validate-pro">
+                                        <b><i class="icon-checkmark3"></i></b> {{ 'valider la proforma'|capitalize }}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /invoice template -->
+
+    {% endfor %}
+
+
+{% endblock %}
+
+{% block themes %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/invoice_template.js') }}"></script>
+{% endblock %}

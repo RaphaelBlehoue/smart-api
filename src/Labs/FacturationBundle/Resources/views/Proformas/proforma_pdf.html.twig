@@ -1,0 +1,182 @@
+<style type="text/css" xmlns="http://www.w3.org/1999/html">
+    <!--
+    table { vertical-align: top; }
+    tr    { vertical-align: top; }
+    td    { vertical-align: top; }
+    table.page_header {width: 100%; padding: 2mm }
+    table.page_footer {width: 100%; border: none; border-top: solid 0.2mm #000; padding: 2mm}
+    .bordes{
+        width: 100%;
+        border: 1px solid #000;
+    }
+
+    .bordes-2{
+        width: 100%;
+        border: 5px double #000;
+    }
+
+    table strong{color:#000;}
+    table span{color:#000;}
+    table td .text-center {text-align: center; }
+    table th{background: #FFF; color:#000; padding:1mm 1mm; border: solid 0.5mm #000;}
+    table.border td{background:#FFF; padding:2.3mm 1mm; border: 0.5mm solid #000;}
+    .note{display:block; background-color:#7F7F7F; line-height:10mm; height:10mm;}
+
+    -->
+</style>
+{% for proforma in data %}
+    <page backtop="7mm" backbottom="7mm" backleft="-5mm" backright="2mm">
+
+        <!--<page_header>
+            <table class="page_header">
+                <tr>
+                    <td style="width: 10%; text-align: left">
+                            <img src="./uploads/compagny/17b73807786edf68f4e87dfdea02ca08ed1d6033.jpeg" alt="logo" width="70">
+                    </td>
+                    <td style="width: 90%; text-align: left">
+                        <h1 style="font-size:50px;">{{ proforma.compagny.name|upper }}</h1>
+                    </td>
+                </tr>
+            </table>
+        </page_header>-->
+
+        <table  style="width:auto; text-align: left; font-size: 9pt; margin-top:25mm">
+            <tr>
+                <td style="text-align: left; padding:2mm 1.5mm;" class="bordes-2">
+                    <span>{{ "CC"|upper }} : <strong>{{ proforma.compagny.compteCc|upper }}</strong></span><br/>
+                    <span>{{ "régime d'imposition"|upper }} : <strong>{{ proforma.compagny.regime|upper }}</strong></span><br/>
+                    <span>{{ "centre des impôts"|upper }} : <strong>{{ proforma.compagny.centerImpot|upper }}</strong></span>
+                </td>
+            </tr>
+        </table>
+        <table  style="width: 100%; text-align: left; font-size: 9pt; margin-top:1mm">
+            <tr>
+                <td style="width: 100%; text-align: left; font-size: 11pt;">
+                        <span>{{ 'pro-forma'|upper }}</span><br/>
+                        <strong>N/Réf : {{ proforma.referenceView|upper }}</strong>
+                </td>
+            </tr>
+        </table>
+
+        <!--<table  style="width: 50%; text-align: left; font-size: 9pt; margin-top:1mm">
+            <tr>
+                <td style="text-align: left; padding:2mm 1.5mm;">
+                    <span>{{ "Entreprise"|upper }} : <strong>{{ proforma.compagny.name|upper }}</strong></span><br/><br/>
+                    <span>{{ "Adresse"|upper }} : <strong>{{ proforma.compagny.adresse|upper }}</strong></span><br/><br/>
+                    <span>{{ "Numero de téléphone"|upper }} : <strong>{{ proforma.compagny.phone|upper }}</strong></span><br/><br/>
+                    <span>{{ "Répresentant"|upper }} : <strong>{{ proforma.compagny.represent|upper }}</strong></span>
+                </td>
+            </tr>
+        </table>-->
+
+        <!-- informations sur la date -->
+        <table  style="width: 100%; text-align: right; font-size: 9pt; margin-top:-10mm">
+            <tr>
+                <td style="text-align: left; padding:2mm 1.5mm; width: 50%">
+                </td>
+                <td style="text-align: center; padding:2mm 1.5mm; width: 50%">
+                    <span>{{ proforma.compagny.city|capitalize }}, le <strong>{{ proforma.created|date('d/m/Y',proforma.created.timezone) }}</strong></span><br/><br/>
+                </td>
+
+            </tr>
+        </table>
+
+        <!-- information client-->
+        <table  style="width: 100%; text-align: right; font-size: 9pt; margin-top:0.1mm">
+            <tr>
+                <td style="text-align: left; padding:0.35mm 0.5mm; width: 50%">
+
+                </td>
+                <td style="text-align: center; padding:0.5mm 0.5mm; width: 50%">
+                    <strong>{{ proforma.clients.name|upper }}</strong><br/><br/>
+                    <span>{{ proforma.clients.adresse|upper }}</span><br/><br/>
+                </td>
+            </tr>
+        </table>
+
+        <!-- information objet -->
+        <table  style="width: 100%; text-align: center; font-size: 9pt; margin-top:1mm">
+            <tr>
+                <td style="text-align: center; padding:2mm 1.5mm;">
+                    <h5><strong>{{ proforma.subject|upper }}</strong></h5>
+                </td>
+            </tr>
+        </table>
+
+        <!-- information des produits sur la proforma -->
+        <table class="border" style="width:100%; border: solid 0.5mm #5544DD; border-collapse: collapse; font-size: 9.5pt; text-align:center;">
+            <thead>
+                <tr>
+                    <th style="width:16%">{{ 'réf'|capitalize }}</th>
+                    <th style="width:43%">{{ 'désignation'|capitalize }}</th>
+                    {% if proforma.services.id == 2 %}
+                        <th style="width:5%">{{ 'D.'|capitalize }}</th>
+                    {% else %}
+                        <th style="width:5%">{{ 'u.'|capitalize }}</th>
+                    {% endif %}
+                    <th style="width:5%">{{ 'qté'|capitalize }}</th>
+                    <th style="width:12%">{{ 'coût unitaire'|capitalize }}</th>
+                    <th style="width:5%">{{ 'r%'|capitalize }}</th>
+                    <th style="width:15%">{{ 'coût total'|capitalize }}</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for prd in proforma.proformasproducts %}
+                <tr>
+                    <td style="width:16%">{{ prd.products.reference }}</td>
+                    <td style="width:43%">{{ prd.products.name|upper }}</td>
+                    {% if proforma.services.id == 2 %}
+                        <td style="width:5%">{{ prd.duration }}</td>
+                    {% else %}
+                        <td style="width:5%">{{ prd.products.unites.code }}</td>
+                     {% endif %}
+                    <td style="width:5%">{{ prd.qteCmd }}</td>
+                    <td style="width:12%">{{ prd.price|number_format(0, ',', '.') }}</td>
+                    <td style="width:5%">{{ (prd.remise|length > 0 ) ? prd.remise ~ '%' : ' ' }} </td>
+                    <td style="width:15%">{{ prd.montHt|number_format(0, ',', '.') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- information sur montant -->
+        <table class="border" style="width: 51%; border: solid 0.5mm #5544DD; border-collapse: collapse; font-size: 9.5pt; text-align:center; margin-top: 3mm; margin-left: 97mm;">
+            <tbody>
+                <tr>
+                    <td style="text-align: center; padding:2mm 1.5mm; width: 50%"><strong>{{ 'Total HT:'|upper }}</strong></td>
+                    <td style="text-align: center; padding:2mm 1.5mm; width: 50%"><span>{{ total.montHt|number_format(0, ',', '.') }} FCFA</span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding:2mm 1.5mm; width: 50%"><strong>{{ 'tva 18%:'|upper }}</strong></td>
+                    <td style="text-align: center; padding:2mm 1.5mm; width: 50%"><span>{{ total.montTva|number_format(0, ',', '.') }} FCFA</span></td>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding:2mm 1.5mm; width: 50%"><strong>{{ 'Total TTC:'|upper }}</strong></td>
+                    <td style="text-align: center; padding:2mm 1.5mm; width: 50%; font-size: 11pt;"><strong>{{ total.montTTC|number_format(0, ',', '.') }} FCFA</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="width: 100%; border: solid 0.5mm #5544DD; border-collapse: collapse; font-size: 9.5pt; text-align:center; margin-top: 5mm;">
+            <tbody>
+                <tr>
+                    <td style="text-align: left; padding:2mm 1.5mm; width: 100%"> <span>{{ 'Arrétez de la somme de :'|upper }}</span> <strong>{{ proforma.arrete|upper }}</strong></td>
+                </tr>
+                <tr>
+                    {% if proforma.conditions |length > 0 %}
+                        <td style="text-align: left; padding:2mm 1.5mm; width: 100%"> <span>{{ 'Conditions de réglement :'|upper }}</span> <strong>{{ proforma.conditions.informations|upper }}</strong></td>
+                    {% endif %}
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="width: 100%; border: solid 0.5mm #5544DD; border-collapse: collapse; font-size: 9.5pt; text-align:center; margin-top: 10mm;">
+            <tbody>
+            <tr>
+                <td style="text-align: right; padding:2mm 1.5mm; width: 100%"> <strong>{{ 'La direction'|upper }}</strong></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </page>
+{% endfor %}

@@ -1,0 +1,70 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2 text">
+                    <h1><strong>Sicodem</strong> Inscription </h1>
+                    <div class="description">
+                        <p>
+                            Créer des proformas pour vos clients simplement.
+                            Si vous rencontrez un problème contactez directement  <a href="mailto:rapahelsampan@gmail.com"><strong>L'administrateur</strong></a>, Bonne expérience à vous!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3>Créer un compte utilisateur</h3>
+                            <p>Entrez les informations d'inscription</p>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="fa fa-lock"></i>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+                         {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register login-form'}}) }}
+
+                            <div class="form-group {% if form_errors(form.firstname) %} has-error {% endif %}">
+                                <label class="sr-only" for="form-username">Nom </label>
+                                {{ form_widget(form.firstname, { 'attr': {'class': 'form-control form-username', 'label':false ,'placeholder': 'Nom', 'id' : 'form-username' } }) }}
+                                {% if form_errors(form.firstname) %}<span id="email" class="help-block" for="email">{{ form_errors(form.firstname) }}</span>{% endif %}
+                            </div>
+                            <div class="form-group {% if form_errors(form.lastname) %} has-error {% endif %}">
+                                <label class="sr-only" for="form-username">Prénoms</label>
+                                {{ form_widget(form.lastname, { 'attr': {'class': 'form-control form-username', 'label':false ,'placeholder': 'Prénom', 'id' : 'form-username' } }) }}
+                                {% if form_errors(form.lastname) %}<span id="email" class="help-block" for="email">{{ form_errors(form.lastname) }}</span>{% endif %}
+                            </div>
+
+                            <div class="form-group {% if form_errors(form.email) %} has-error {% endif %}">
+                                <label class="sr-only" for="form-username">Adresse Email</label>
+                                {{ form_widget(form.email, { 'attr': {'class': 'form-control form-username', 'label':false ,'placeholder': 'form.email'|trans, 'id' : 'form-username' } }) }}
+                                {% if form_errors(form.email) %}<span id="email" class="help-block" for="email">{{ form_errors(form.email) }}</span>{% endif %}
+                            </div>
+
+                            <div class="form-group {% if form_errors(form.plainPassword.first) %} has-error {% endif %}">
+                                <label class="sr-only" for="plainPassword.first">Mot de passe (*)</label>
+                                {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control form-password', 'placeholder': 'form.password'|trans, 'id':'form-password' } }) }}
+                                {% if form_errors(form.plainPassword.first) %}<span id="plainPassword.first" class="help-block" for="plainPassword.first">{{ form_errors(form.plainPassword.first) }}</span>{% endif %}
+                            </div>
+
+                            <div class="form-group {% if form_errors(form.plainPassword.second) %} has-error {% endif %}">
+                                <label class="sr-only" for="form.plainPassword.second">Confirmer votre mot de passe (*)</label>
+                                {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control form-password', 'placeholder': 'form.password_confirmation'|trans } }) }}
+                                {% if form_errors(form.plainPassword.second) %}<span id="plainPassword.first" class="help-block" for="plainPassword.first">{{ form_errors(form.plainPassword.second) }}</span>{% endif %}
+                            </div>
+
+                            <input type="submit" value="{{ 'registration.submit'|trans }}" class="btn"/>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock fos_user_content %}
+

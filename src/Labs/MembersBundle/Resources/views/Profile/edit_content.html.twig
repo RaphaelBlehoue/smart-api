@@ -1,0 +1,74 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="content-wrapper">
+    <!-- Form horizontal -->
+
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span class="text-semibold">{{ flashMessage|capitalize }}</span>
+        </div>
+    {% endfor %}
+
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">{{ 'MODIFICATION Du PROFILE Utilisateur'|upper }}</h5>
+            <div class="heading-elements">
+                <div class="icons-list">
+                    <a href="{{ path('fos_user_profile_show') }}" class="btn btn-primary btn-labeled"><b><i class="icon-menu7"></i></b> Afficher mon profile</a>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="panel-body">
+                {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'form-horizontal fos_user_profile_edit' } }) }}
+                {{ form_errors(form) }}
+
+                <fieldset class="content-group col-lg-8 col-md-offset-2">
+
+                    <legend class="text-bold">Modification de profile</legend>
+
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3 form-box">
+                            <div class="form-top">
+                                <div class="form-top-left">
+                                    <h5>{{ 'Modifier les informations de votre compte' }}</h5>
+                                </div>
+                            </div>
+                            <div class="form-bottom">
+
+                                <div class="form-group {% if form_errors(form.firstname) %} has-error {% endif %}">
+                                    <label for="form-firstname">Nom </label>
+                                    {{ form_widget(form.firstname) }}
+                                    {% if form_errors(form.firstname) %}<span id="email" class="help-block" for="email">{{ form_errors(form.firstname) }}</span>{% endif %}
+                                </div>
+                                <div class="form-group {% if form_errors(form.lastname) %} has-error {% endif %}">
+                                    <label for="form-lastname">Prénoms</label>
+                                    {{ form_widget(form.lastname) }}
+                                    {% if form_errors(form.lastname) %}<span id="email" class="help-block" for="email">{{ form_errors(form.lastname) }}</span>{% endif %}
+                                </div>
+
+                                <div class="form-group {% if form_errors(form.email) %} has-error {% endif %}">
+                                    <label for="form-email">Adresse Email</label>
+                                    {{ form_widget(form.email) }}
+                                    {% if form_errors(form.email) %}<span id="email" class="help-block" for="email">{{ form_errors(form.email) }}</span>{% endif %}
+                                </div>
+
+                                <div class="form-group {% if form_errors(form.current_password) %} has-error {% endif %}">
+                                    <label for="form-current-password">Mot de passe actuel</label>
+                                    {{ form_widget(form.current_password, { 'attr': {'class': 'form-control form-password', 'placeholder': 'form.password'|trans, 'id':'form-password' } }) }}
+                                    {% if form_errors(form.current_password) %}<span id="plainPassword.first" class="help-block" for="plainPassword.first">{{ form_errors(form.plainPassword.first) }}</span>{% endif %}
+                                </div>
+                                <input type="submit" value="{{ 'profile.edit.submit'|trans }}" class="btn btn-danger" />
+                            </div>
+                        </div>
+                    </div>
+
+                </fieldset>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+</div>

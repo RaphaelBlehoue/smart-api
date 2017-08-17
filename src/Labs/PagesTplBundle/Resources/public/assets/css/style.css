@@ -1,0 +1,18 @@
+/*
+
+
+
+*/
+
+.displayNone{
+    display: none;
+}
+
+.displayBlock{
+    display: block;
+}
+
+.disabled-input{
+    color:#ff0000 !important;
+    font-weight: bold;
+}

@@ -1,0 +1,63 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+imports:
+    - { resource: legacy_aliases.yml }
+
+parameters:
+#    parameter_name: value
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    fos_user.doctrine_registry:
+        alias: doctrine
+
+    app.twig.intl_extension:
+        public: false
+        class:  Twig_Extensions_Extension_Intl
+        tags:
+            - { name: twig.extension }
+
+    app.twig.text_extension:
+        public: false
+        class:  Twig_Extensions_Extension_Text
+        tags:
+            - { name: twig.extension }
+
+    Labs\FacturationBundle\Services\StockTestQuantity:
+        arguments: ['@request_stack', '@doctrine.orm.entity_manager']
+
+    Labs\FacturationBundle\Services\generateRefProforma:
+        arguments: ['@request_stack', '@doctrine.orm.entity_manager', '@service_container']
+
+    Labs\FacturationBundle\Services\getProformaMontant:
+        arguments: ['@request_stack', '@doctrine.orm.entity_manager']
+
+    Labs\FacturationBundle\Twig\Extensions\QuantityOutRestExtension:
+        arguments: ['@service_container']
+        tags:
+            - { name: twig.extension }
+
+#MemberBundle
+
+    Labs\MembersBundle\EventListener\RegistrationConfirmListener:
+        arguments: ['@router']
+        tags:
+            - { name: kernel.event_subscriber }
+
+    Labs\MembersBundle\EventListener\UserLoginRouteListener:
+        arguments: ['@security.token_storage','@router','@service_container', '@session', '@doctrine']
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    Labs\MembersBundle\Form\Type\RegistrationFormType:
+        arguments: ['%fos_user.model.user.class%']
+        tags:
+            - { name: form.type, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType,  alias: mem_user_registration }
+
+    Labs\MembersBundle\Form\Type\ProfileFormType:
+        arguments: ['%fos_user.model.user.class%']
+        tags:
+            - { name: form.type, extended_type: Symfony\Component\Form\Extension\Core\Type\FormType, alias: mem_user_profile_edit }

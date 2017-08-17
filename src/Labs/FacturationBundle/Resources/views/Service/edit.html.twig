@@ -1,0 +1,68 @@
+{% extends 'LabsFacturationBundle::layout_system.html.twig' %}
+{% block loyout_body %}
+    <div class="container-fluid container-fixed-lg">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="container-md-height m-b-20">
+                    <div class="row row-md-height">
+                        <div class="col-lg-12 col-md-12 col-md-height col-middle bg-white">
+                            <!-- START PANEL -->
+                            <div class="full-height">
+                                <div class="panel-body text-center">
+                                    <h3>Gestion Configuration | Services</h3>
+                                </div>
+                            </div>
+                            <!-- END PANEL -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- START CONTAINER FLUID -->
+    <div class="container-fluid container-fixed-lg">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- START PANEL -->
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            Créer une nouvelle "Service" en utilisant ce formulaire en vous assurant qu'il es durement remplir
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <h5 class="col-sm-offset-3">
+                            Formulaire de création d'Service
+                        </h5>
+                        {{ form_start(form) }}
+                        {{ form_errors(form) }}
+
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <div class="form-group form-group-default required">
+                                    <label>Nom du Service</label>
+                                    {{ form_row(form.name) }}
+                                    {{ form_errors(form.name) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <button class="btn btn-danger" type="submit">Modifier le Service</button>
+                            </div>
+                        </div>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+                <!-- END PANEL -->
+            </div>
+        </div>
+    </div>
+    <!-- END CONTAINER FLUID -->
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('bundles/labspagestpl/assets/plugins/bootstrap-select2/select2.min.js') }}"></script>
+{% endblock %}

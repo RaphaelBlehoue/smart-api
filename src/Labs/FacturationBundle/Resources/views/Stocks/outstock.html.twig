@@ -1,0 +1,183 @@
+{% extends 'LabsFacturationBundle::layout_system.html.twig' %}
+{% block Title %}  {{ 'Gestion de Stock'|capitalize }} {% endblock %}
+{% block loyout_body %}
+    <!-- Individual column searching (text inputs) -->
+    <!-- START CONTAINER FLUID -->
+
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span class="text-semibold">{{ flashMessage|capitalize }}</span>
+        </div>
+    {% endfor %}
+
+
+    <!-- START PANEL -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Gestion de stock - Sortie de Stock <small>{{ 'mouvement de stock'|capitalize }}</small></h5>
+            <div class="heading-elements">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger btn-labeled" data-toggle="modal" data-target="#modal_form_outstock">
+                        Sortie manuelle <b><i class="icon-minus3 position-right"></i></b>
+                    </button>
+                    <a href="{{ path('labs_facturation_stock_get_all') }}" class="btn btn-primary btn-labeled"><b><i class="icon-menu7"></i></b> Afficher le stock</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            Tableau des Sorties dans le Stock
+        </div>
+
+        <table class="table datatable-column-search-inputs">
+            <thead>
+            <tr>
+                <th>Reference inventaire</th>
+                <th>SKU</th>
+                <th>Type Mouvement</th>
+                <th>Type inventaire</th>
+                <th>Quantité</th>
+                <th>Origine</th>
+                <th>Création</th>
+                <th>Mise à jour</th>
+                <th>Entrepôt</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for out in list %}
+                {% if out|length > 0 %}
+                    <tr>
+                        <td><span class="label label-primary">{{ out.reference|upper }}</span></td>
+                        <td><b>{{ out.sku|upper }}</b></td>
+                        <td><span class="label label-info">{{out.mouvement.name }}</span></td>
+                        <td><span class="label label-{{ (out.codeMouv == 1) ? 'success' : 'danger' }}">{{ (out.codeMouv == 1) ? 'Entreé' : 'Sortie' }}</span></td>
+                        <td><span class="label label-success"> {{ out.quantity  }}</span></td>
+                        <td><span class="label bg-purple"> {{ out.referrer|upper  }}</span></td>
+                        <td><a href="#">{{ out.created|date('Y/m/d', out.created.timezone) }}</a></td>
+                        <td><a href="#">{{ out.updated|date('Y/m/d', out.updated.timezone) }}</a></td>
+                        <td><b>{{ out.entrepot.name|upper }}</b></td>
+                        <td class="text-center">
+                            <a href="{{ path('labs_facturation_stock_delete', { 'id' : out.id}) }}" class="label label-danger label-icon"><i class=" icon-trash"></i></a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <!-- /individual column searching (text inputs) -->
+
+    <!-- stock form modal -->
+    <div id="modal_form_outstock" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Formulaire de sortie de stock</h5>
+                </div>
+
+                {{ form_start(form , { attr : {'class':'form-horizontal'} }) }}
+                {{ form_errors(form) }}
+                <input type="hidden" class="refprd" value="" name="_refperd">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Type de mouvement</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.mouvement) }}
+                            {{ form_errors(form.mouvement) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Référence du produit</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.product) }}
+                            {{ form_errors(form.product) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Nom du produit</label>
+                        <div class="col-lg-9">
+                            <div>
+                                <p></p>
+                                <span class="label label-success prod"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Disponibilité du stock</label>
+                        <div class="col-lg-9">
+                            <div>
+                                <p></p>
+                                <span class="label label-success stock"></span>
+                                <input type="hidden" value="" class="stock_input" name="_stock_count">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Entrepôt au quel ce mouvement est rattaché</label>
+                        <div class="col-lg-9">
+                            {{ form_errors(form.entrepot) }}
+                            {{ form_row(form.entrepot) }}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Disponibilité dans ce entrepot</label>
+                        <div class="col-lg-9">
+                            <div>
+                                <p></p>
+                                <span class="label label-success stock_entrepot"></span>
+                                <input type="hidden" value="" class="stock_input_entrepot" name="_stock_count">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Quantité</label>
+                        <div class="col-lg-4">
+                            {{ form_errors(form.quantity) }}
+                            {{ form_row(form.quantity, {attr : {'class':'product_qte form-control border-teal border-lg text-teal', 'placeholder' : 'Qté sortie'}}) }}
+                        </div>
+                    </div>
+                    <span class="label label-flat border-danger text-danger-600 text-left alert-messages"></span>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary btn_outstock">Enregistre la sortie</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    <!-- /stock form modal -->
+
+
+{% endblock %}
+{% block themes %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/form_inputs.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/core/libraries/jquery_ui/interactions.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/form_select2.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/components_modals.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/datatables_api.js') }}"></script>
+
+
+{% endblock %}

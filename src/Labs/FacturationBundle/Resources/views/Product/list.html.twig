@@ -1,0 +1,106 @@
+{% extends 'LabsFacturationBundle::layout_system.html.twig' %}
+{% block Title %}  {{ 'Gestion des Articles'|capitalize }} {% endblock %}
+{% block loyout_body %}
+    <!-- Individual column searching (text inputs) -->
+    <!-- START CONTAINER FLUID -->
+
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success alert-styled-left alert-arrow-left alert-bordered">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+            <span class="text-semibold">{{ flashMessage|capitalize }}</span>
+        </div>
+    {% endfor %}
+
+
+    <!-- START PANEL -->
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Gestion des Articles - Liste des Produits</h5>
+            <div class="heading-elements">
+                <ul class="icons-list">
+                    <a href="{{ path('labs_facturation_product_add') }}" class="btn btn-success btn-labeled"><b><i class="icon-plus3"></i></b> Créer un nouveau</a>
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel-body">
+            Tableau des produits
+        </div>
+
+        <table class="table datatable-column-search-inputs">
+            <thead>
+            <tr>
+                <th>Réference</th>
+                <th>Produits</th>
+                <th>PU d'achat</th>
+                <th>Nature</th>
+                <th>PU Vente</th>
+                <th>PU Location</th>
+                <th>Famille</th>
+                <th>Marque</th>
+                <th>Seuil de stock</th>
+                <th>Coût unitaire</th>
+                <th class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in list %}
+                {% if product|length > 0 %}
+                    {% set price = (product.buyPrice * product.coef ) %}
+                    <tr>
+                        <td><span class="label label-flat border-danger text-danger-600">{{ product.reference }}</span></td>
+                        <td>{{ product.name|truncate(30, true, "...") }}</td>
+                        <td><span class="label label-info">{{ product.buyPrice|number_format(0, ',', '.') }}</span></td>
+                        <td>
+                            <span class="label label-primary">
+                                {% if product.type|length > 0 %}
+                                    {{ (product.type == 1) ? 'Services' : 'Bien' }}
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="label label-success">
+                                {% if product.buyPrice|length > 0 %}
+                                    {{ price |number_format(0, ',', '.') }}
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td><span class="label label-info">{{ product.hirePrice|number_format(0, ',', '.') }}</span></td>
+                        <td>{{ product.category.name }}</td>
+                        <td> {% if product.marks|length > 0 %} {{ product.marks.name }} {% endif %}</td>
+                        <td><span class="label label-danger">{{ product.minStock }}</span></td>
+                        <td>
+                            <span class="label label-info">
+                                {% if product.cout|length > 0 %}
+                                    {{ product.cout|number_format(0, ',', '.') }}
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <ul class="icons-list">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="icon-menu9"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="{{ path('labs_facturation_product_edit', { 'id' : product.id, 'slug' : product.slug}) }}"><i class="icon-pencil5"></i>{{ 'Modifier'|capitalize }}</a></li>
+                                        <li><a href="{{ path('labs_facturation_product_delete',{'id' : product.id} ) }}"><i class="icon-cancel-square2"></i>{{ 'Supprimer'|capitalize }}</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <!-- /individual column searching (text inputs) -->
+{% endblock %}
+{% block themes %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/tables/datatables/datatables.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/datatables_api.js') }}"></script>
+{% endblock %}

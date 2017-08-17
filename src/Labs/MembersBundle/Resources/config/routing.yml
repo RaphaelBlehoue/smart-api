@@ -1,0 +1,15 @@
+labs_members_client:
+    resource:  "@LabsMembersBundle/Resources/config/routing/client.yml"
+    prefix:    /customer
+
+labs_members_profile:
+    resource:  "@LabsMembersBundle/Resources/config/routing/profil.yml"
+    prefix:    /users
+
+labs_members_office_view:
+    path:     /view
+    defaults: { _controller: LabsMembersBundle:Users:getUsersList }
+
+labs_members_employer_delete:
+    path:     /delete/{id}
+    defaults: { _controller: LabsMembersBundle:Users:delete }

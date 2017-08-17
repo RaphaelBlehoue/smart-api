@@ -1,0 +1,169 @@
+{% extends 'LabsFacturationBundle::layout_system.html.twig' %}
+{% block Title %}  {{ 'Paramètrage'|capitalize }} {% endblock %}
+{% block loyout_body %}
+    <!-- Main content -->
+    <div class="content-wrapper">
+        <!-- Form horizontal -->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title">{{ 'Paramètrez votre entreprise' }}</h5>
+                <div class="heading-elements">
+                    <div class="icons-list">
+                        <a href="{{ path('labs_facturation_compagny_list') }}" class="btn btn-primary btn-labeled"><b><i class="icon-menu7"></i></b> Afficher l'entreprise</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                {{ form_start(form, { attr : { 'class':'form-horizontal'}}) }}
+                {{ form_errors(form) }}
+
+                <fieldset class="content-group col-lg-6 col-md-offset-2">
+
+                    <legend class="text-bold">Formulaire de configuration</legend>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">nom de l'entreprise</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.name) }}
+                            {{ form_errors(form.name) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Pays</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.country) }}
+                            {{ form_errors(form.country) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Ville</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.city) }}
+                            {{ form_errors(form.city) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Rue , commune</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.street) }}
+                            {{ form_errors(form.street) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Compte contribuable</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.compte_cc) }}
+                            {{ form_errors(form.compte_cc) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Centre des impôts </label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.center_impot) }}
+                            {{ form_errors(form.center_impot) }}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Téléphone - 1</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.phone) }}
+                            {{ form_errors(form.phone) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Téléphone - 2</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.phoneTwo) }}
+                            {{ form_errors(form.phoneTwo) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Fax</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.fax) }}
+                            {{ form_errors(form.fax) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Email</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.email) }}
+                            {{ form_errors(form.email) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Adresse</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.adresse) }}
+                            {{ form_errors(form.adresse) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Banque</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.bank) }}
+                            {{ form_errors(form.bank) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Regime d'imposition</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.regime) }}
+                            {{ form_errors(form.regime) }}
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Représentant</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.represent) }}
+                            {{ form_errors(form.represent) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">Logo</label>
+                        <div class="col-lg-9">
+                            {{ form_row(form.file) }}
+                            {{ form_errors(form.file) }}
+                        </div>
+                    </div>
+
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Enregister <i class="icon-database-add position-right"></i></button>
+                    </div>
+
+                </fieldset>
+
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block themes %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/forms/styling/uniform.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/form_inputs.js') }}"></script>
+
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/core/libraries/jquery_ui/interactions.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/plugins/forms/selects/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/labslimitlesstpl/assets/js/pages/form_select2.js') }}"></script>
+
+{% endblock %}
