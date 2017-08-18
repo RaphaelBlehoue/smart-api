@@ -42,3 +42,7 @@
 
 # Embedded web-server pid file
 /.web-server-pid
+
+#Packagist
+/vendor/
+/node_modules/
