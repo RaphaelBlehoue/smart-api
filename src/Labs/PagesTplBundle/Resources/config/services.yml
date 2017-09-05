@@ -1,4 +1,0 @@
-services:
-#    labs_pages_tpl.example:
-#        class: Labs\PagesTplBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]

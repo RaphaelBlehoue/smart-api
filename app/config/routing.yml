@@ -1,29 +1,3 @@
-labs_limitless_tpl:
-    resource: "@LabsLimitlessTplBundle/Controller/"
-    type:     annotation
-    prefix:   /limitless
-
-labs_login_tpl:
-    resource: "@LabsLoginTplBundle/Controller/"
-    type:     annotation
-    prefix:   /tempalelogin
-
-labs_members:
-    resource: "@LabsMembersBundle/Controller/"
-    type:     annotation
-    prefix:   /utilisateurs
-
-labs_pages_tpl:
-    resource: "@LabsPagesTplBundle/Controller/"
-    type:     annotation
-    prefix:   /template
-
-labs_facturation:
-    resource: "@LabsFacturationBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
-fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
-fos_js_routing:
-    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation

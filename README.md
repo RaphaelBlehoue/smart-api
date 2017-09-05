@@ -1,4 +1,4 @@
-gfac.dev
-========
+smart-dev-api
+=============
 
-A Symfony project created on August 8, 2017, 1:06 pm.
+A Symfony project created on September 5, 2017, 9:45 pm.

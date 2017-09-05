@@ -1,4 +1,0 @@
-services:
-#    labs_login_tpl.example:
-#        class: Labs\LoginTplBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
