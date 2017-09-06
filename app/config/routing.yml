@@ -1,3 +1,6 @@
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
+labs_app:
+    resource: "@LabsAppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+
